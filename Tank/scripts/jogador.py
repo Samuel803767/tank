@@ -1,28 +1,28 @@
 import pygame
-import math
 from scripts.projetil import Projetil
 
 class Jogador:
-    def __init__(self, x, y, image_path, speed=1):
+    def __init__(self, x, y, image_path, speed=1, controles=None):
         self.image = pygame.image.load(image_path)
         self.image = pygame.transform.scale(self.image, (50, 50))  # Ajusta o tamanho do tanque
         self.position = [x, y]
         self.angle = 0
         self.speed = speed
         self.projeteis = []  # Lista para armazenar projéteis
+        self.controles = controles if controles else {}  # Dicionário com os controles do jogador
 
     def atualizar(self, keys):
-        # Movimentação e rotação do tanque
-        if keys[pygame.K_w]:  # Para cima
+        # Movimentação e rotação do tanque com base nos controles
+        if keys[self.controles.get('cima', pygame.K_w)]:  # Para cima
             self.angle = 90
             self.position[1] -= self.speed
-        if keys[pygame.K_s]:  # Para baixo
+        if keys[self.controles.get('baixo', pygame.K_s)]:  # Para baixo
             self.angle = -90
             self.position[1] += self.speed
-        if keys[pygame.K_a]:  # Para a esquerda
+        if keys[self.controles.get('esquerda', pygame.K_a)]:  # Para a esquerda
             self.angle = 180
             self.position[0] -= self.speed
-        if keys[pygame.K_d]:  # Para a direita
+        if keys[self.controles.get('direita', pygame.K_d)]:  # Para a direita
             self.angle = 0
             self.position[0] += self.speed
 
@@ -51,3 +51,4 @@ class Jogador:
 
         # Desenhar o tanque
         tela.blit(rotated_image, rotated_rect.topleft)
+
